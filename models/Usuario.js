@@ -23,7 +23,7 @@ module.exports = (sequelize, Sequelize) => {
                 }
             }
         },
-        codigoExclusão: {
+        codigoExclusao: {
             type: Sequelize.STRING,
             allowNull: false,
             defaultValue: () => uuidv4().replace(/-/g, '').substring(0, 5)
