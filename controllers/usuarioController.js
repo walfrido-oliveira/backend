@@ -58,3 +58,34 @@ exports.deleteUsuario = async (req, res) => {
         });
     }
 }
+
+exports.updateUsuario = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { novoLogin } = req.body;
+
+        const usuario = await Usuario.findByPk(id);
+
+        if (!usuario) {
+            return res.status(404).json({
+                message: "Usuário não encontrado com o Id fornecido",
+                error: "404"
+            });
+        }
+
+        if (novoLogin) {
+            usuario.login = novoLogin;
+        }
+
+        await usuario.save();
+
+        return res.status(200).json({
+            message: `Usuário com Id ${id} atualizado com sucesso.`,
+        });
+    } catch (error) {
+        return res.status(500).json({
+            message: "Erro ao atualizar o usuário",
+            error: error.message
+        });
+    }
+}

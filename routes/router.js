@@ -12,5 +12,6 @@ router.delete('/api/cliente/:id', clientes.deleteCliente);
 
 router.post('/api/usuario', usuarios.createUsuario);
 router.delete('/api/usuario/:id', usuarios.deleteUsuario);
+router.put('/api/usuario', usuarios.updateUsuario);
 
 module.exports = router;
