@@ -105,3 +105,40 @@ exports.usuarios = (req, res) => {
         });
     }
 }
+
+exports.modifyPassword = async (req, res) => {
+    try {
+        const { id, senhaAtual, novaSenha } = req.body;
+
+        const usuario = await Usuario.findByPk(id);
+
+        if (!usuario) {
+            return res.status(404).json({
+                message: "Usuário não encontrado com o Id fornecido",
+                error: "404"
+            });
+        }
+
+        const senhaCorreta = await usuario.verificarSenha(senhaAtual);
+
+        if (!senhaCorreta) {
+            return res.status(401).json({
+                message: "Senha atual incorreta",
+                error: "401"
+            });
+        }
+
+        const hashedNovaSenha = await bcrypt.hash(novaSenha, 10);
+
+        await usuario.update({ hashedNovaSenha });
+
+        return res.status(200).json({
+            message: "Senha do usuário atualizada com sucesso",
+        });
+    } catch (error) {
+        return res.status(500).json({
+            message: "Erro ao modificar a senha do usuário",
+            error: error.message
+        });
+    }
+}
