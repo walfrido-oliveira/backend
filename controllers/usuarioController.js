@@ -89,3 +89,19 @@ exports.updateUsuario = async (req, res) => {
         });
     }
 }
+
+exports.usuarios = (req, res) => {
+    try {
+       Usuario.findAll({ attributes: ['id', 'login', 'senha', 'codigoExclusao'] })
+       .then(usuarios => {
+            res.status(200).json(usuarios);
+       })
+    } catch (error) {
+        console.log(error);
+
+        res.status(500).json({
+            message: "Error!",
+            error: error
+        });
+    }
+}
