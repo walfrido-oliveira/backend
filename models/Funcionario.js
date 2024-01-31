@@ -25,7 +25,7 @@ module.exports = (sequelize, Sequelize) => {
 
     Funcionario.associate = (models) => {
         Cliente.belongsTo(models.Usuario, {
-            foreingnKey: 'id_usuario',
+            foreignKey: 'id_usuario',
             as: 'usuario'
         });
     };
