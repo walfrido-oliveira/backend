@@ -8,11 +8,12 @@ exports.createUsuario = async (req, res) => {
     try {
         usuario.id = req.body.id;
         usuario.login = req.body.login;
+        usuario.email = req.body.email;
         usuario.senha = req.body.senha;
         usuario.codigoExclusao = req.body.codigoExclusao;
 
         Usuario.create(usuario,
-            { attributes: ['id', 'login', 'senha', 'codigoExclusao'] })
+            { attributes: ['id', 'login','email', 'senha', 'codigoExclusao'] })
             .then(result => {
                 res.status(200).json(result);
             });
@@ -62,7 +63,7 @@ exports.deleteUsuario = async (req, res) => {
 exports.updateUsuario = async (req, res) => {
     try {
         const { id } = req.params;
-        const { novoLogin } = req.body;
+        const { novoLogin, novoEmail } = req.body;
 
         const usuario = await Usuario.findByPk(id);
 
@@ -75,6 +76,10 @@ exports.updateUsuario = async (req, res) => {
 
         if (novoLogin) {
             usuario.login = novoLogin;
+        }
+
+        if (novoEmail) {
+            usuario.email = novoEmail; 
         }
 
         await usuario.save();
@@ -92,7 +97,7 @@ exports.updateUsuario = async (req, res) => {
 
 exports.usuarios = (req, res) => {
     try {
-       Usuario.findAll({ attributes: ['id', 'login', 'senha', 'codigoExclusao'] })
+       Usuario.findAll({ attributes: ['id', 'login','email', 'senha', 'codigoExclusao'] })
        .then(usuarios => {
             res.status(200).json(usuarios);
        })
