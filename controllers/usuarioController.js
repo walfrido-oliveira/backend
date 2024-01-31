@@ -13,7 +13,7 @@ exports.createUsuario = async (req, res) => {
         usuario.codigoExclusao = req.body.codigoExclusao;
 
         Usuario.create(usuario,
-            { attributes: ['id', 'login','email', 'senha', 'codigoExclusao'] })
+            { attributes: ['id', 'login', 'email', 'senha', 'codigoExclusao'] })
             .then(result => {
                 res.status(200).json(result);
             });
