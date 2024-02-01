@@ -3,6 +3,7 @@ let router = express.Router();
 
 const clientes = require('../controllers/clienteController.js');
 const usuarios = require('../controllers/usuarioController.js');
+const funcionarios = require('../controllers/controller.js');
 
 router.post('/api/cliente', clientes.createCliente);
 router.get('/api/cliente/:id', clientes.getCliente);
@@ -15,5 +16,7 @@ router.delete('/api/usuario/:id', usuarios.deleteUsuario);
 router.put('/api/usuario', usuarios.updateUsuario);
 router.get('/api/usuarios', usuarios.usuarios);
 router.post('/api/usuario/modify-password', usuarios.modifyPassword)
+
+router.post('/api/funcionario', funcionarios.createFuncionario);
 
 module.exports = router;

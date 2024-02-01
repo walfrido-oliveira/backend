@@ -1,6 +1,6 @@
 module.exports = (sequelize, Sequelize) => {
     const Funcionario = sequelize.define('funcionario', {
-        id_funcionaro: {
+        id: {
             type: Sequelize.INTEGER,
             autoINcrement: true,
             primaryKey: true
@@ -13,14 +13,14 @@ module.exports = (sequelize, Sequelize) => {
             type: Sequelize.INTEGER,
             allowNull: false
         },
-        cargo:{
+        cargo: {
             type: Sequelize.STRING,
             allowNull: false
         },
-        email: {
-            type: Sequelize.STRING,
-            allowNull: false,
-        }
+        id_usuario: {
+            type: Sequelize.INTEGER,
+            allowNull: false
+        },
     });
 
     Funcionario.associate = (models) => {
