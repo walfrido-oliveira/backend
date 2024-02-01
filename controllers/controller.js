@@ -21,3 +21,18 @@ exports.createFuncionario = (req, res) => {
     });
   }
 }  
+
+exports.getFuncionario = (req, res) => {
+  Funcionario.findByPk(req.params.id, 
+    { attributes: ['id', 'nome', 'idade', 'cargo', 'id_usuario']})
+    .then(funcionario => {
+      res.status(200).json(funcionario);
+    }).catch (error => {
+      console.log(error);
+
+      res.status(500).json({
+        message: "Error!",
+        error: error
+      });
+    })
+}

@@ -18,5 +18,7 @@ router.get('/api/usuarios', usuarios.usuarios);
 router.post('/api/usuario/modify-password', usuarios.modifyPassword)
 
 router.post('/api/funcionario', funcionarios.createFuncionario);
+router.get('/api/funcionario/:id'. funcionarios.getFuncionario);
+
 
 module.exports = router;
