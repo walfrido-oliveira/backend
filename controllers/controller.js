@@ -36,3 +36,20 @@ exports.getFuncionario = (req, res) => {
       });
     })
 }
+
+exports.funcionarios = (req, res) => {
+  try {
+    Funcionario.findAll({ attributes: ['id', 'nome', 'idade', 'cargo', 'id_usuario']})
+    .then(funcionarios => {
+      res.status(200).json(funcionarios);
+    })
+  } catch (error) {
+    console.log(error);
+
+    res.status(500).json({
+      message: "Error!",
+      error: error
+    });
+  }
+}
+
