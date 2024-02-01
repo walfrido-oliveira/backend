@@ -53,3 +53,37 @@ exports.funcionarios = (req, res) => {
   }
 }
 
+exports.deleteFuncionarios = async (req, res) => {
+  try {
+    const { id, codigoExclusao } = req.body;
+
+    const funcionario = await Funcionario.findByPk(id);
+
+    if (!funcionario) {
+      return res.status(401).json({
+        message: "Funcionário não encontrado com o Id forncecido",
+        error: "401"
+      });
+    }
+
+    const codigoEsperado = codigoExclusao;
+
+    if (codigoEsperado !== codigoExclusao) {
+      return res.status(404).json({
+        message: "Código de exclusão incorreto. A exclusão requer o código correto.",
+        error: "401"
+      });
+    }
+
+    await funcionario.destroy();
+
+    return res.status(200).json({
+      message: "Funcionário deletado com sucesso."
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: "Erro ao deletar funcionário",
+      error: error.message
+    });
+  }
+}
