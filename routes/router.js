@@ -8,7 +8,7 @@ const funcionarios = require('../controllers/controller.js');
 router.post('/api/cliente', clientes.createCliente);
 router.get('/api/cliente/:id', clientes.getCliente);
 router.get('/api/clientes', clientes.clientes);
-//router.put('/api/cliente', clientes.updateCliente);
+router.put('/api/cliente', clientes.updateCliente);
 router.delete('/api/cliente/:id', clientes.deleteCliente);
 
 router.post('/api/usuario', usuarios.createUsuario);

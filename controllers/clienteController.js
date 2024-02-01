@@ -54,7 +54,7 @@ exports.clientes = (req, res) => {
 
 exports.deleteCliente = async (req, res) => {
   try {
-    const { id, codigoConfirmacao } = req.body;
+    const { id, codigoExclusao } = req.body;
 
     const cliente = await Cliente.findByPk(id);
 
@@ -67,7 +67,7 @@ exports.deleteCliente = async (req, res) => {
 
     const codigoEsperado = cliente.codigoExclusao;
 
-    if (codigoConfirmacao !== codigoEsperado) {
+    if (codigoExclusao !== codigoEsperado) {
       return res.status(401).json({
         message: "Código de confirmação incorreto. A exclusão requer confirmação.",
         error: "401"
@@ -87,40 +87,42 @@ exports.deleteCliente = async (req, res) => {
   }
 }
 
-exports.modifyPassword = async (req, res) => {
+exports.updateCliente = async (req, res) => {
   try {
-    const { id, senhaAtual, novaSenha } = req.body;
-
-    const cliente = await Cliente.findByPk(id);
+    let cliente = await Cliente.findByPk(req.body.id);
 
     if (!cliente) {
       return res.status(404).json({
-        message: "Cliente não encontrado com o ID fornecido",
-        error: "404"
+        message: "Cliente não encontrado com o Id fornecido",
+        error: "404",
+      });
+    } else {
+      let updateObject = {
+        nome: req.body.nome,
+        idade: req.body.idade
+      }
+      let result = await Cliente.update(updateObject,
+        {
+          returning: true,
+          where: { id: req.body.id },
+          attributes: ['id', 'nome', 'idade', 'id_usuario']
+        }
+      );
+        
+    if (!result) {
+      return res.status(500).json({
+        message: "Error -> Can not update a customer with id = " + req.params.id,
+        error: "Can NOT Updated"
       });
     }
 
-    const senhaCorreta = await cliente.verificarSenha(senhaAtual);
-
-    if (!senhaCorreta) {
-      return res.status(401).json({
-        message: "Senha atual incorreta",
-        error: "401"
-      });
+    console.log(result);
+    res.status(200).json(result);    
     }
-
-
-    const hashedNovaSenha = await bcrypt.hash(novaSenha, 10);
-
-    await cliente.update({ senha: hashedNovaSenha });
-
-    return res.status(200).json({
-      message: "Senha do cliente atualizada com sucesso",
-    });
   } catch (error) {
     return res.status(500).json({
-      message: "Erro ao modificar a senha do cliente",
+      message: "Error -> Can not update a customer with id = " + req.params.id,
       error: error.message
     });
   }
-};
+}
