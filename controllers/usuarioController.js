@@ -6,7 +6,6 @@ exports.createUsuario = async (req, res) => {
     let usuario = {};
 
     try {
-        usuario.id = req.body.id;
         usuario.login = req.body.login;
         usuario.email = req.body.email;
         usuario.senha = req.body.senha;
