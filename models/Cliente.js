@@ -13,6 +13,10 @@ module.exports = (sequelize, Sequelize) => {
             type: Sequelize.INTEGER,
             allowNull: false
         },
+        id_usuario: {
+            type: Sequelize.INTEGER,
+            allowNull: false
+        }
     });
 
     Cliente.associate = (models) => {

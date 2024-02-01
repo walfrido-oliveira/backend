@@ -7,8 +7,9 @@ exports.createCliente = (req, res) => {
   try {
     cliente.nome = req.body.nome;
     cliente.idade = req.body.idade;
+    cliente.id_usuario = req.body.id_usuario;
     Cliente.create(cliente,
-      { attributes: ['id', 'nome', 'idade'] })
+      { attributes: ['id', 'nome', 'idade', 'id_usuario'] })
       .then(result => {
         res.status(200).json(result);
       });
@@ -22,7 +23,7 @@ exports.createCliente = (req, res) => {
 
 exports.getCliente = (req, res) => {
   Cliente.findByPk(req.params.id,
-    { attributes: ['id', 'nome', 'idade'] })
+    { attributes: ['id', 'nome', 'idade', 'id_usuario'] })
     .then(cliente => {
       res.status(200).json(cliente);
     }).catch(error => {
@@ -37,7 +38,7 @@ exports.getCliente = (req, res) => {
 
 exports.clientes = (req, res) => {
   try {
-    Cliente.findAll({ attributes: ['id', 'nome', 'idade'] })
+    Cliente.findAll({ attributes: ['id', 'nome', 'idade', 'id_usuario'] })
       .then(clientes => {
         res.status(200).json(clientes);
       })
