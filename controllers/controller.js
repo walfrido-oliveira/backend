@@ -60,16 +60,16 @@ exports.deleteFuncionarios = async (req, res) => {
     const funcionario = await Funcionario.findByPk(id);
 
     if (!funcionario) {
-      return res.status(401).json({
+      return res.status(404).json({
         message: "Funcionário não encontrado com o Id forncecido",
-        error: "401"
+        error: "404"
       });
     }
 
     const codigoEsperado = codigoExclusao;
 
     if (codigoEsperado !== codigoExclusao) {
-      return res.status(404).json({
+      return res.status(401).json({
         message: "Código de exclusão incorreto. A exclusão requer o código correto.",
         error: "401"
       });
@@ -83,6 +83,47 @@ exports.deleteFuncionarios = async (req, res) => {
   } catch (error) {
     return res.status(500).json({
       message: "Erro ao deletar funcionário",
+      error: error.message
+    });
+  }
+}
+
+exports.updateFuncionario = async (req, res) => {
+  try {
+    let funcionario = await Funcionario.findByPk(req.body.id);
+
+    if (!funcionario) {
+      return res.status(404).json({
+        message: "Funcionário não encontrado com o Id fornecido",
+        error: "404"
+      });
+    } else {
+      let updateObject = {
+        nome: req.body.nome,
+        idade: req.body.idade,
+        cargo: req.body.cargo
+      }
+
+      let result = await Funcionario.update(updateObject,
+          {
+            returning: true,
+            where: { id: req.body.id },
+            attributes: ['id', 'nome', 'idade', 'cargo', 'id_usuario']
+          }
+        );
+      if (!result) {
+        return res.status(500).json({
+          message: "Error -> Can not update a customer with a Id = " + req.params.id,
+          error: "Can NOT Updated"
+        });
+      }
+
+      console.log(result);
+      res.status(200).json(result);
+    }
+  } catch (error) {
+    return res.status(500).json({
+      message: "Erro -> Can not update a customer with a Id = " + req.params.id,
       error: error.message
     });
   }
