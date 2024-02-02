@@ -18,7 +18,7 @@ router.get('/api/usuarios', usuarios.usuarios);
 router.post('/api/usuario/modify-password', usuarios.modifyPassword)
 
 router.post('/api/funcionario', funcionarios.createFuncionario);
-router.get('/api/funcionario/:id'. funcionarios.getFuncionario);
+router.get('/api/funcionario/:id', funcionarios.getFuncionario);
 router.get('/api/funcionarios', funcionarios.funcionarios);
 router.delete('/api/funcionario/:id', funcionarios.deleteFuncionarios);
 router.put('/api/funcionario', funcionarios.updateFuncionario);
