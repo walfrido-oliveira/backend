@@ -3,7 +3,7 @@ let router = express.Router();
 
 const clientes = require('../controllers/clienteController.js');
 const usuarios = require('../controllers/usuarioController.js');
-const funcionarios = require('../controllers/controller.js');
+const funcionarios = require('../controllers/funcionarioController.js');
 
 router.post('/api/cliente', clientes.createCliente);
 router.get('/api/cliente/:id', clientes.getCliente);
