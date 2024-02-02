@@ -9,7 +9,6 @@ exports.createUsuario = async (req, res) => {
         usuario.login = req.body.login;
         usuario.email = req.body.email;
         usuario.senha = req.body.senha;
-        usuario.codigoExclusao = req.body.codigoExclusao;
 
         Usuario.create(usuario,
             { attributes: ['id', 'login', 'email', 'senha', 'codigoExclusao'] })
