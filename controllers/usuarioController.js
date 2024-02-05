@@ -145,3 +145,38 @@ exports.modifyPassword = async (req, res) => {
         });
     }
 }
+
+exports.loginUsuario = async (req, res) => {
+    try {
+        const { login, senhaAtual } = req.body;
+
+        const usuario = await Usuario.findOne({
+            where: { login },
+            include: [
+                { model: Cliente, where: { id_usuario: Sequelize.Col('Usuario.id') }, requered: false },
+                { model: Funcionario, where: { id_usuario: Sequelize.Col('Usuario.id') }, required: false },
+            ],
+        });
+
+        if (!usuario) {
+            return res.status(404).json({
+                message: "Usuário não encontrado com o login fornecido",
+                error: "404"
+            });
+        }
+
+        const senhaCorreta = await Usuario.verificarSenha(senhaAtual);
+
+        if (!senhaCorreta) {
+            return res.status(401).json({
+                message: "Senha atual incorreta",
+                error: "401"
+            });
+        }
+    } catch (error) {
+        return res.status(500).json({
+            message: "Erro ao realizar o login do usuário",
+            error: error.message
+        });
+    }
+}

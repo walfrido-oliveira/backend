@@ -2,7 +2,7 @@ module.exports = (sequelize, Sequelize) => {
     const Funcionario = sequelize.define('funcionario', {
         id: {
             type: Sequelize.INTEGER,
-            autoINcrement: true,
+            autoIncrement: true,
             primaryKey: true
         },
         nome: {
@@ -24,7 +24,7 @@ module.exports = (sequelize, Sequelize) => {
     });
 
     Funcionario.associate = (models) => {
-        Cliente.belongsTo(models.Usuario, {
+        Funcionario.belongsTo(models.Usuario, {
             foreignKey: 'id_usuario',
             as: 'usuario'
         });
