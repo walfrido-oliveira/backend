@@ -1,4 +1,13 @@
-const env = require('./env');
+require('dotenv').config();
+
+const env = {
+    database: process.env.DATABASE_NAME,
+    username: process.env.DATABASE_USERNAME,
+    password: process.env.DATABASE_PASSWORD,
+    host: process.env.DATABASE_HOST,
+    dialect: process.env.DATABASE_DIALECT,
+    jwtSecret: process.env.JWT_SECRET
+}
 const { Sequelize } = require('sequelize');
 
 const sequelize = new Sequelize(env.database, env.username, env.password, {
@@ -21,5 +30,6 @@ db.sequelize = new Sequelize(env.database, env.username, env.password, {
     dialect: env.dialect,
     operatorAliases: false
 });
+db.jwtSecret = env.jwtSecret;
 
 module.exports = db;
