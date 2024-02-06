@@ -1,4 +1,5 @@
 const db = require('../config/db.config.js');
+const jwtConfig = require('../config/jwtconfig.js');
 
 const Usuario = db.Usuario;
 
@@ -173,6 +174,19 @@ exports.loginUsuario = async (req, res) => {
                 error: "401"
             });
         }
+        
+        const token = jwtConfig.gerarToken(usuario);
+
+        return res.status(200).json({
+            message: "Usuário logado com sucesso",
+            usuario: {
+                id: usuario.id,
+                login: usuario.login,
+                cliente: usuario.cliente,
+                Funcionario: usuario.Funcionario
+            },
+            token: token
+        })
     } catch (error) {
         return res.status(500).json({
             message: "Erro ao realizar o login do usuário",

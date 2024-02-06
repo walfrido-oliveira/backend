@@ -1,6 +1,7 @@
 let express = require('express');
 let router = express.Router();
 
+const AuthController = require('../middlewares/auth.js');
 const clientes = require('../controllers/clienteController.js');
 const usuarios = require('../controllers/usuarioController.js');
 const funcionarios = require('../controllers/funcionarioController.js');
@@ -16,7 +17,7 @@ router.delete('/api/usuario/:id', usuarios.deleteUsuario);
 router.put('/api/usuario', usuarios.updateUsuario);
 router.get('/api/usuarios', usuarios.usuarios);
 router.post('/api/usuario/modify-password', usuarios.modifyPassword);
-router.post('api/usuario/:login', usuarios.loginUsuario);
+router.post('api/usuario/:login', AuthController.loginUsuario);
 
 router.post('/api/funcionario', funcionarios.createFuncionario);
 router.get('/api/funcionario/:id', funcionarios.getFuncionario);

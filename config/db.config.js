@@ -6,7 +6,6 @@ const env = {
     password: process.env.DATABASE_PASSWORD,
     host: process.env.DATABASE_HOST,
     dialect: process.env.DATABASE_DIALECT,
-    jwtSecret: process.env.JWT_SECRET
 }
 const { Sequelize } = require('sequelize');
 
