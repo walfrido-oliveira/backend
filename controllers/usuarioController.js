@@ -1,7 +1,11 @@
 const db = require('../config/db.config.js');
-const jwtConfig = require('../config/jwtconfig.js');
+require('dotenv').config();
+const jwt = require('jsonwebtoken');
 
+const secretKey = process.env.JWT_SECRET;
 const Usuario = db.Usuario;
+const Cliente = db.Cliente;
+const Funcionario = db.Funcionario;
 
 exports.createUsuario = async (req, res) => {
     let usuario = {};
@@ -149,10 +153,10 @@ exports.modifyPassword = async (req, res) => {
 
 exports.loginUsuario = async (req, res) => {
     try {
-        const { login, senhaAtual } = req.body;
+        const { id, senhaAtual } = req.body;
 
         const usuario = await Usuario.findOne({
-            where: { login },
+            where: { id },
             include: [
                 { model: Cliente, where: { id_usuario: Sequelize.Col('Usuario.id') }, requered: false },
                 { model: Funcionario, where: { id_usuario: Sequelize.Col('Usuario.id') }, required: false },
@@ -175,18 +179,10 @@ exports.loginUsuario = async (req, res) => {
             });
         }
         
-        const token = jwtConfig.gerarToken(usuario);
+        const token = jwt.sign({ id: usuario.id }, secretKey, { expiresIn: '1h'});
 
-        return res.status(200).json({
-            message: "Usuário logado com sucesso",
-            usuario: {
-                id: usuario.id,
-                login: usuario.login,
-                cliente: usuario.cliente,
-                Funcionario: usuario.Funcionario
-            },
-            token: token
-        })
+        res.status(200).json({ token });
+        
     } catch (error) {
         return res.status(500).json({
             message: "Erro ao realizar o login do usuário",

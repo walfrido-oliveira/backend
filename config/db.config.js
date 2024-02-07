@@ -6,6 +6,7 @@ const env = {
     password: process.env.DATABASE_PASSWORD,
     host: process.env.DATABASE_HOST,
     dialect: process.env.DATABASE_DIALECT,
+    jwtSecret: process.env.JWT_SECRET
 }
 const { Sequelize } = require('sequelize');
 
@@ -19,7 +20,7 @@ const db = [];
 
 db.Usuario = require('../models/Usuario')(sequelize, Sequelize);
 db.Cliente = require('../models/Cliente')(sequelize, Sequelize);
-db.Funcionario = require('../models/funcionario')(sequelize, Sequelize);
+db.Funcionario = require('../models/Funcionario')(sequelize, Sequelize);
 
 db.Usuario.hasOne(db.Cliente, { foreignKey: 'id_usuario' });
 db.Usuario.hasOne(db.Funcionario, { foreignKey: 'id_usuario' });

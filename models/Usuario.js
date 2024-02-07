@@ -23,7 +23,7 @@ module.exports = (sequelize, Sequelize) => {
             validate: {
                 len: {
                     args: [5, 10],
-                    msg: 'A senha dave ter entre 5 a 10 caracteres.'
+                    msg: 'A senha deve ter entre 5 a 10 caracteres.'
                 }
             }
         },

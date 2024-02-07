@@ -1,20 +1,20 @@
 const jwt = require('jsonwebtoken');
-const jwtConfig = require('../config/jwtconfig');
+require('dotenv').config();
 
-module.exports = (req, res, next) => {
-  const token = req.headers.authorization;
+const jwtSecret = process.env.JWT_SECRET;
 
-  if (token) {
+function verifyToken (req, res, next) {
+  const token = req.header('Authorization');
+    if (!token) {
+      return res.status(401).json( { error: 'Acesso negado' } );
+    }
     try {
-      const decodedToken = jwtConfig.verificarToken(token);
-      req.usuario = decodedToken;
+      const decoded = jwt.verify(token, jwtSecret);
+      req.id = decoded.id;
       next();
     } catch (error) {
-      console.error('Erro ao verificar o token', error.message);
-      res.status(401).json({ message: 'Token inválido ou expirado' });
+      res.status(401).json({ error: 'codigo inválido' });
     }
-  } else {
-    console.error('Cabeçalho Authorization não encontrado na requisição');
-    res.status(401).json({ message: 'Token não encontrado' });
-  }
 };
+
+module.exports = verifyToken;
