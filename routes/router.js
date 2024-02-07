@@ -6,30 +6,23 @@ const clientes = require('../controllers/clienteController.js');
 const usuarios = require('../controllers/usuarioController.js');
 const funcionarios = require('../controllers/funcionarioController.js');
 
-const Funcionario = require('../models/Funcionario');
-
-router.get('/', verifyToken, (req, res) => {
-  res.status(200).json({ message: "Rota protegida acessada" });
-});
-
-
-router.post('/api/cliente', clientes.createCliente);
-router.get('/api/cliente/:id', clientes.getCliente);
-router.get('/api/clientes', clientes.clientes);
-router.put('/api/cliente', clientes.updateCliente);
-router.delete('/api/cliente/:id', clientes.deleteCliente);
+router.post('/api/cliente', verifyToken, clientes.createCliente);
+router.get('/api/cliente/:id', verifyToken, clientes.getCliente);
+router.get('/api/clientes',verifyToken, clientes.clientes);
+router.put('/api/cliente', verifyToken, clientes.updateCliente);
+router.delete('/api/cliente/:id', verifyToken, clientes.deleteCliente);
 
 router.post('/api/usuario', usuarios.createUsuario);
-router.delete('/api/usuario/:id', usuarios.deleteUsuario);
-router.put('/api/usuario', usuarios.updateUsuario);
-router.get('/api/usuarios', usuarios.usuarios);
+router.delete('/api/usuario/:id',verifyToken, usuarios.deleteUsuario);
+router.put('/api/usuario',verifyToken, usuarios.updateUsuario);
+router.get('/api/usuarios',verifyToken, usuarios.usuarios);
 router.post('/api/usuario/modify-password', usuarios.modifyPassword);
 router.post('/api/usuario/login', usuarios.loginUsuario);
 
-router.post('/api/funcionario', funcionarios.createFuncionario);
-router.get('/api/funcionario/:id', funcionarios.getFuncionario);
-router.get('/api/funcionarios', funcionarios.funcionarios);
-router.delete('/api/funcionario/:id', funcionarios.deleteFuncionarios);
-router.put('/api/funcionario', funcionarios.updateFuncionario);
+router.post('/api/funcionario',verifyToken, funcionarios.createFuncionario);
+router.get('/api/funcionario/:id',verifyToken, funcionarios.getFuncionario);
+router.get('/api/funcionarios',verifyToken, funcionarios.funcionarios);
+router.delete('/api/funcionario/:id',verifyToken, funcionarios.deleteFuncionarios);
+router.put('/api/funcionario',verifyToken, funcionarios.updateFuncionario);
 
 module.exports = router;

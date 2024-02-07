@@ -4,8 +4,6 @@ const jwt = require('jsonwebtoken');
 
 const secretKey = process.env.JWT_SECRET;
 const Usuario = db.Usuario;
-const Cliente = db.Cliente;
-const Funcionario = db.Funcionario;
 
 exports.createUsuario = async (req, res) => {
     let usuario = {};
@@ -153,14 +151,10 @@ exports.modifyPassword = async (req, res) => {
 
 exports.loginUsuario = async (req, res) => {
     try {
-        const { id, senhaAtual } = req.body;
+        const { login, senhaAtual } = req.body;
 
         const usuario = await Usuario.findOne({
-            where: { id },
-            include: [
-                { model: Cliente, where: { id_usuario: Sequelize.Col('Usuario.id') }, requered: false },
-                { model: Funcionario, where: { id_usuario: Sequelize.Col('Usuario.id') }, required: false },
-            ],
+            where: { login }
         });
 
         if (!usuario) {
@@ -170,7 +164,7 @@ exports.loginUsuario = async (req, res) => {
             });
         }
 
-        const senhaCorreta = await Usuario.verificarSenha(senhaAtual);
+        const senhaCorreta = await usuario.verificarSenha(senhaAtual);
 
         if (!senhaCorreta) {
             return res.status(401).json({
@@ -179,7 +173,7 @@ exports.loginUsuario = async (req, res) => {
             });
         }
         
-        const token = jwt.sign({ id: usuario.id }, secretKey, { expiresIn: '1h'});
+        const token = jwt.sign({ login: usuario.login }, secretKey, { expiresIn: '1h'});
 
         res.status(200).json({ token });
         

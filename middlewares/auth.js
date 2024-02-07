@@ -10,7 +10,7 @@ function verifyToken (req, res, next) {
     }
     try {
       const decoded = jwt.verify(token, jwtSecret);
-      req.id = decoded.id;
+      req.login = decoded.login;
       next();
     } catch (error) {
       res.status(401).json({ error: 'codigo inválido' });

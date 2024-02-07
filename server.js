@@ -4,7 +4,9 @@ const app = express();
 
 const db = require('./config/db.config.js');
 
-const Cliente = db.Cliente;
+const Funcionario = require('./models/Funcionario.js');
+const Cliente = require('./models/Cliente.js');
+const Usuario = require('./models/Usuario.js');
 
 var bodyParser = require("body-parser");
 
@@ -29,8 +31,15 @@ const server = app.listen(8080, function () {
 
     console.log("App está rodando no endereço http://%s:%s", host, port);
 });
+app.use()
 
-
+db.sequelize.sync({ force: true })
+    .then(() => {
+        console.log('modelos sincronizados com o banco de dados.');
+    })
+    .catch((error) => { 
+        console.error('Erro ao sincronizar modelos com o banco de dados.');
+    });
 /*db.sequelize.sync({force: true}).then(() => {
     console.log('Apaga e recria a tabela usando { force: true }');
     Cliente.sync().then(() => {
