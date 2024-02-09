@@ -151,7 +151,7 @@ exports.modifyPassword = async (req, res) => {
 
 exports.loginUsuario = async (req, res) => {
     try {
-        const { login, senhaAtual } = req.body;
+        const { login, senha } = req.body;
 
         const usuario = await Usuario.findOne({
             where: { login }
@@ -164,7 +164,7 @@ exports.loginUsuario = async (req, res) => {
             });
         }
 
-        const senhaCorreta = await usuario.verificarSenha(senhaAtual);
+        const senhaCorreta = await usuario.verificarSenha(senha);
 
         if (!senhaCorreta) {
             return res.status(401).json({

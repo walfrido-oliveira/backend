@@ -31,7 +31,6 @@ const server = app.listen(8080, function () {
 
     console.log("App está rodando no endereço http://%s:%s", host, port);
 });
-app.use()
 
 db.sequelize.sync({ force: true })
     .then(() => {
