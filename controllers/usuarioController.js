@@ -114,7 +114,7 @@ exports.usuarios = (req, res) => {
 
 exports.modifyPassword = async (req, res) => {
     try {
-        const { id, senhaAtual, novaSenha } = req.body;
+        const { id, senha, novaSenha } = req.body;
 
         const usuario = await Usuario.findByPk(id);
 
@@ -125,7 +125,7 @@ exports.modifyPassword = async (req, res) => {
             });
         }
 
-        const senhaCorreta = await usuario.verificarSenha(senhaAtual);
+        const senhaCorreta = await usuario.verificarSenha(senha);
 
         if (!senhaCorreta) {
             return res.status(401).json({
