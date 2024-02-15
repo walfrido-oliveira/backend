@@ -5,6 +5,7 @@ const jwtSecret = process.env.JWT_SECRET;
 
 function verifyToken (req, res, next) {
   const token = req.header('Authorization');
+
     if (!token) {
       return res.status(401).json( { error: 'Acesso negado' } );
     }
