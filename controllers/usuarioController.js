@@ -112,6 +112,21 @@ exports.usuarios = (req, res) => {
     }
 }
 
+exports.getUsuarios = async (req, res) => {
+    Usuario.findByPk(req.params.id,
+    { attributes: ['id', 'login', 'email', 'senha', 'CodigoExclusão'] })
+    .then(usuario => {
+         res.status(200).json(usuario);
+    }).catch(error => {
+        console.log(error);
+
+        res.status(500).json({
+            message: "Error!",
+            error: error
+        });
+    });
+}
+
 exports.modifyPassword = async (req, res) => {
     try {
         const { id, senha, novaSenha } = req.body;

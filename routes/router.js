@@ -16,6 +16,7 @@ router.post('/api/usuario', usuarios.createUsuario);
 router.delete('/api/usuario/:id',verifyToken, usuarios.deleteUsuario);
 router.put('/api/usuario',verifyToken, usuarios.updateUsuario);
 router.get('/api/usuarios',verifyToken, usuarios.usuarios);
+router.get('/api/usuario/:id', verifyToken, usuarios.getUsuarios);
 router.post('/api/usuario/modify-password', usuarios.modifyPassword);
 router.post('/api/usuario/login', usuarios.loginUsuario);
 
