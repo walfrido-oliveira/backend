@@ -63,31 +63,36 @@ exports.deleteUsuario = async (req, res) => {
 
 exports.updateUsuario = async (req, res) => {
     try {
-        const { id } = req.params;
-        const { novoLogin, novoEmail } = req.body;
-
-        const usuario = await Usuario.findByPk(id);
+        let usuario = await Usuario.findByPk(req.body.id);
 
         if (!usuario) {
             return res.status(404).json({
                 message: "Usuário não encontrado com o Id fornecido",
                 error: "404"
             });
+        } else {
+            let updateObject = {
+                login: req.body.login,
+                email: req.body.email
+            }
+            let result = await Usuario.update(updateObject, 
+                {
+                    returning: true,
+                    where: { id: req.body.id },
+                    attributes: ['id', 'login', 'email', 'senha']
+                }
+            );
+        
+        if (!result){
+            return res.status(500).json({
+                message: "Error -> Can not update a customer with id = " + req.params.id,
+                error: "Can NOT Updated"
+            });
         }
 
-        if (novoLogin) {
-            usuario.login = novoLogin;
+        console.log(result);
+        res.status(200).json(result);
         }
-
-        if (novoEmail) {
-            usuario.email = novoEmail; 
-        }
-
-        await usuario.save();
-
-        return res.status(200).json({
-            message: `Usuário com Id ${id} atualizado com sucesso.`,
-        });
     } catch (error) {
         return res.status(500).json({
             message: "Erro ao atualizar o usuário",
