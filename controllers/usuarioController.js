@@ -28,9 +28,10 @@ exports.createUsuario = async (req, res) => {
 
 exports.deleteUsuario = async (req, res) => {
     try {
-        const { id, codigoExclusao } = req.body;
+        const usuarioId = req.params.id;
+        const codigoExclusao = req.params.codigoExclusao;
 
-        const usuario = await Usuario.findByPk(id);
+        const usuario = await Usuario.findByPk(usuarioId);
 
         if (!usuario) {
             return res.status(404).json({
@@ -134,9 +135,11 @@ exports.getUsuarios = async (req, res) => {
 
 exports.modifyPassword = async (req, res) => {
     try {
-        const { id, senha, novaSenha } = req.body;
+        const usuarioId = req.params.id;
+        const senha = req.params.senha;
+        const novaSenha = req.body; 
 
-        const usuario = await Usuario.findByPk(id);
+        const usuario = await Usuario.findByPk(usuarioId);
 
         if (!usuario) {
             return res.status(404).json({

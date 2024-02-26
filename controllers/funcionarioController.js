@@ -55,9 +55,10 @@ exports.funcionarios = (req, res) => {
 
 exports.deleteFuncionarios = async (req, res) => {
   try {
-    const { id, codigoExclusao } = req.body;
+    const funcionarioId = req.params.id;
+    const codigoExclusao = req.params.codigoExclusao;
 
-    const funcionario = await Funcionario.findByPk(id);
+    const funcionario = await Funcionario.findByPk(funcionarioId);
 
     if (!funcionario) {
       return res.status(404).json({

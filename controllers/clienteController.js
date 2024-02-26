@@ -54,9 +54,10 @@ exports.clientes = (req, res) => {
 
 exports.deleteCliente = async (req, res) => {
   try {
-    const { id, codigoExclusao } = req.body;
+    const clienteId = req.params.id;
+    const codigoExclusao = req.params.codigoExclusao;
 
-    const cliente = await Cliente.findByPk(id);
+    const cliente = await Cliente.findByPk(clienteId);
 
     if (!cliente) {
       return res.status(404).json({
