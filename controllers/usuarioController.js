@@ -1,6 +1,7 @@
 const db = require('../config/db.config.js');
 require('dotenv').config();
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
 
 const secretKey = process.env.JWT_SECRET;
 const Usuario = db.Usuario;
@@ -40,7 +41,7 @@ exports.deleteUsuario = async (req, res) => {
             });
         }
 
-        const codigoEsperado = usuario.codigoExclusao;
+        const codigoEsperado = codigoExclusao;
 
         if (codigoExclusao !== codigoEsperado) {
             return res.status(401).json({
@@ -136,8 +137,7 @@ exports.getUsuarios = async (req, res) => {
 exports.modifyPassword = async (req, res) => {
     try {
         const usuarioId = req.params.id;
-        const senha = req.params.senha;
-        const novaSenha = req.body; 
+        const { senha, novaSenha } = req.body;
 
         const usuario = await Usuario.findByPk(usuarioId);
 
@@ -159,7 +159,7 @@ exports.modifyPassword = async (req, res) => {
 
         const hashedNovaSenha = await bcrypt.hash(novaSenha, 10);
 
-        await usuario.update({ hashedNovaSenha });
+        await usuario.update({ senha: hashedNovaSenha })
 
         return res.status(200).json({
             message: "Senha do usuário atualizada com sucesso",

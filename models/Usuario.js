@@ -37,14 +37,14 @@ module.exports = (sequelize, Sequelize) => {
         hooks: {
             beforeCreate: async (Usuario) => {
                 if(Usuario.changed('senha')){
-                    const hashedPassword = await bcrypt.hash(Usuario.senha, 10);
-                    Usuario.senha = hashedPassword;
+                    const hashedSenha = await bcrypt.hash(Usuario.senha, 10);
+                    Usuario.senha = hashedSenha;
                 };
             },
             beforeUpdate: async (Usuario) => {
                 if(Usuario.changed('senha')){
-                    const hashedPassword = await bcrypt.hash(Usuario.senha, 10);
-                    Usuario.senha = hashedPassword;
+                    const hashedNovaSenha = await bcrypt.hash(Usuario.getDataValue('senha'), 10);
+                    Usuario.getDataValue('senha', hashedNovaSenha);
                 }
             }
         }
