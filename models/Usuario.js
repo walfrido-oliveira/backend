@@ -22,7 +22,7 @@ module.exports = (sequelize, Sequelize) => {
             allowNull: false,
             validate: {
                 len: {
-                    args: [5, 10],
+                    args: [6],
                     msg: 'A senha deve ter entre 5 a 10 caracteres.'
                 }
             }
@@ -37,13 +37,13 @@ module.exports = (sequelize, Sequelize) => {
         hooks: {
             beforeCreate: async (Usuario) => {
                 if(Usuario.changed('senha')){
-                    const hashedSenha = await bcrypt.hash(Usuario.senha, 10);
+                    const hashedSenha = await bcrypt.hash(Usuario.senha, 6);
                     Usuario.senha = hashedSenha;
                 };
             },
             beforeUpdate: async (Usuario) => {
                 if(Usuario.changed('senha')){
-                    const hashedNovaSenha = await bcrypt.hash(Usuario.getDataValue('senha'), 10);
+                    const hashedNovaSenha = await bcrypt.hash(Usuario.getDataValue('senha'), 6);
                     Usuario.getDataValue('senha', hashedNovaSenha);
                 }
             }

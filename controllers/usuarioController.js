@@ -157,9 +157,11 @@ exports.modifyPassword = async (req, res) => {
             });
         }
 
-        const hashedNovaSenha = await bcrypt.hash(novaSenha, 10);
+        const hashedNovaSenha = await bcrypt.hash(novaSenha, 6);
 
+        console.log(hashedNovaSenha);
         await usuario.update({ senha: hashedNovaSenha })
+        console.log(usuario.senha);
 
         return res.status(200).json({
             message: "Senha do usuário atualizada com sucesso",
