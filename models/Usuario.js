@@ -20,12 +20,13 @@ module.exports = (sequelize, Sequelize) => {
         senha: {
             type: Sequelize.STRING,
             allowNull: false,
-            validate: {
-                len: {
-                    args: [6],
-                    msg: 'A senha deve ter entre 5 a 10 caracteres.'
+            set(value) {
+               if (value.length >= 8 && value.length <= 20) {
+                this.setDataValue('senha', bcrypt.hashSync(value, 10));
+                } else {
+                  throw new Error('Your password should be between 8-20 characters!' + value);
                 }
-            }
+              }
         },
         codigoExclusao: {
             type: Sequelize.STRING,
@@ -35,23 +36,29 @@ module.exports = (sequelize, Sequelize) => {
     },
     {
         hooks: {
-            beforeCreate: async (Usuario) => {
+            /*beforeCreate: async (Usuario) => {
                 if(Usuario.changed('senha')){
-                    const hashedSenha = await bcrypt.hash(Usuario.senha, 6);
+                    const hashedSenha = await bcrypt.hash(Usuario.senha, 10);
                     Usuario.senha = hashedSenha;
                 };
-            },
-            beforeUpdate: async (Usuario) => {
-                if(Usuario.changed('senha')){
-                    const hashedNovaSenha = await bcrypt.hash(Usuario.getDataValue('senha'), 6);
-                    Usuario.getDataValue('senha', hashedNovaSenha);
-                }
-            }
+            },*/
         }
     });
 
     Usuario.prototype.verificarSenha = async function (senha) {
         return await bcrypt.compare(senha, this.getDataValue('senha'));
+    }
+      
+    Usuario.associate = (models) => {
+        Usuario.hasOne(Cliente, {
+            foreignKey: 'id_usuario'
+        });
+    };
+
+    Usuario.associate = (models) => {
+        Usuario.hasOne(Funcionario, {
+            foreignKey: 'id_usuario'
+        });
     }
 
     return Usuario;

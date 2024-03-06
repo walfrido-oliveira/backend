@@ -1,7 +1,6 @@
 const db = require('../config/db.config.js');
 require('dotenv').config();
 const jwt = require('jsonwebtoken');
-const bcrypt = require('bcrypt');
 
 const secretKey = process.env.JWT_SECRET;
 const Usuario = db.Usuario;
@@ -81,7 +80,7 @@ exports.updateUsuario = async (req, res) => {
                 {
                     returning: true,
                     where: { id: req.body.id },
-                    attributes: ['id', 'login', 'email', 'senha']
+                    attributes: ['id', 'login', 'email', 'senha', 'codigoExclusao']
                 }
             );
         
@@ -119,19 +118,36 @@ exports.usuarios = (req, res) => {
     }
 }
 
-exports.getUsuarios = async (req, res) => {
-    Usuario.findByPk(req.params.id,
-    { attributes: ['id', 'login', 'email', 'senha', 'CodigoExclusão'] })
-    .then(usuario => {
-         res.status(200).json(usuario);
-    }).catch(error => {
-        console.log(error);
-
-        res.status(500).json({
-            message: "Error!",
-            error: error
-        });
+exports.getUsuario = async (req, res) => {
+   try {
+    const usuario = await Usuario.findOne({
+        where: {id: req.params.id},
+        include: [
+            {
+                model: db.Cliente,
+                attributes: ['id', 'nome', 'idade', 'id_usuario']
+            },
+            {
+                model: db.Funcionario,
+                attributes: ['id', 'nome', 'idade', 'cargo', 'id_usuario']
+            }
+        ]
     });
+
+    if(!usuario){
+        return res.status(404).json({
+            message: "Usuário não existe com o id fornecido"
+        });
+    }
+
+    return res.status(200).json(usuario);
+   } catch (error) {
+        console.error('Erro ao buscar usuários:', error);
+        return res.status.json({
+            message: "Erro ao buscar usuário:", 
+            error: error
+        })
+   }
 }
 
 exports.modifyPassword = async (req, res) => {
@@ -157,11 +173,9 @@ exports.modifyPassword = async (req, res) => {
             });
         }
 
-        const hashedNovaSenha = await bcrypt.hash(novaSenha, 6);
+        //const hashedNovaSenha = await bcrypt.hash(novaSenha, 6);
 
-        console.log(hashedNovaSenha);
-        await usuario.update({ senha: hashedNovaSenha })
-        console.log(usuario.senha);
+        await usuario.update({ senha: novaSenha })
 
         return res.status(200).json({
             message: "Senha do usuário atualizada com sucesso",
@@ -198,9 +212,11 @@ exports.loginUsuario = async (req, res) => {
             });
         }
         
-        const token = jwt.sign({ login: usuario.login }, secretKey, { expiresIn: '1h'});
+        const token = jwt.sign({ id: usuario.id, login: usuario.login }, secretKey, { expiresIn: '1h'});
 
-        res.status(200).json({ token });
+        console.log('iD', usuario.id);
+
+        res.status(200).json({ token, id: usuario.id });
         
     } catch (error) {
         return res.status(500).json({

@@ -19,11 +19,9 @@ module.exports = (sequelize, Sequelize) => {
         }
     });
 
+    
     Cliente.associate = (models) => {
-        Cliente.belongsTo(models.Usuario, {
-            foreignKey: 'id_usuario',
-            as: 'usuario'
-        });
+        Cliente.belongsTo(models.Usuario);
     };
 
     return Cliente;
